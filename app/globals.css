@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Vantro design tokens
+   Palette: Paper & Signal. Accent (signal) is reserved for the
+   forecast line, key numbers and the primary CTA.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-paper: #f3f0e8;
+  --color-paper-2: #ebe6da;
+  --color-paper-3: #e0d9c9;
+  --color-surface: #f8f6f0;
+  --color-line: #d4ccba;
+  --color-ink: #121416;
+  --color-ink-2: #2b2f2d;
+  --color-muted: #565b57;
+  --color-pine: #2e5a4c;
+  --color-pine-deep: #1f3f35;
+  --color-pine-soft: #dce5df;
+  --color-signal: #e4572e;
+  /* AA-safe orange for small text on paper (5.2:1) */
+  --color-signal-ink: #b23c17;
+
+  --font-display: var(--font-instrument), "Times New Roman", serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fluid type scale */
+  --text-display-xl: clamp(3.25rem, 1.9rem + 5.6vw, 7.25rem);
+  --text-display-xl--line-height: 0.94;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-l: clamp(2.6rem, 1.7rem + 3.6vw, 5rem);
+  --text-display-l--line-height: 0.98;
+  --text-display-l--letter-spacing: -0.015em;
+  --text-display-m: clamp(2.1rem, 1.6rem + 2vw, 3.5rem);
+  --text-display-m--line-height: 1.04;
+  --text-display-m--letter-spacing: -0.01em;
+  --text-display-s: clamp(1.65rem, 1.4rem + 1vw, 2.25rem);
+  --text-display-s--line-height: 1.1;
+  --text-lead: clamp(1.125rem, 1.04rem + 0.35vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.08em;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --shadow-frame: 0 1px 0 rgb(18 20 22 / 0.04), 0 30px 60px -30px rgb(18 20 22 / 0.28);
+  --shadow-pop: 0 12px 28px -12px rgb(18 20 22 / 0.35);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 600ms;
+
+  --animate-rise: rise 900ms var(--ease-out-expo) both;
+}
+
+@keyframes rise {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+:root {
+  --ring: var(--color-ink);
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-feature-settings: "ss01", "cv11";
+}
+
+.on-dark {
+  --ring: var(--color-paper);
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.container-x {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 32px;
+  }
+}
+@media (min-width: 1280px) {
+  .container-x {
+    padding-inline: 48px;
+  }
+}
+
+.eyebrow {
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Masked line reveal: hero runs on load (CSS only, no JS needed). */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+.mask-line > span {
+  display: block;
+  animation: var(--animate-rise);
+  animation-delay: calc(var(--i, 0) * 90ms + 80ms);
+}
+
+/* Scroll reveals, toggled by <InView>. Each variant moves differently. */
+[data-reveal="mask"] .mask-line > span {
+  animation: none;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 900ms var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+[data-reveal="mask"][data-inview="true"] .mask-line > span {
+  transform: translate3d(0, 0, 0);
+}
+[data-reveal="rule"] .rule {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1100ms var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+[data-reveal="rule"][data-inview="true"] .rule {
+  transform: scaleX(1);
+}
+
+/* Link underline that draws in from the left */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--duration-base) var(--ease-out-expo);
+}
+.link-draw:hover,
+.link-draw[aria-current="page"] {
+  background-size: 100% 1px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal="mask"] .mask-line > span,
+  [data-reveal="rule"] .rule {
+    transform: none;
+  }
+}
